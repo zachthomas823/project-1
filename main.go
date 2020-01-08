@@ -4,14 +4,26 @@ import (
 	"encoding/csv"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func main() {
 	nbaStats, _ := os.Open("./nba_data.csv")
 	csvReader := csv.NewReader(nbaStats)
-	for i := 0; i < 2; i++ {
-		line, _ := csvReader.Read()
-		// if line[1]
-		fmt.Println(line[1])
+	playerName := os.Args[1]
+	contin := true
+	found := false
+	for contin {
+		line, error := csvReader.Read()
+		if error != nil {
+			contin = false
+		} else if strings.Split(line[1], "\\")[0] == playerName {
+			fmt.Println(line)
+			found = true
+			contin = false
+		}
+	}
+	if !found {
+		fmt.Println("Couldn't find that player")
 	}
 }
