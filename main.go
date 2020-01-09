@@ -2,25 +2,22 @@ package main
 
 import (
 	"encoding/csv"
+	"flag"
 	"fmt"
 	"os"
 	"strings"
 )
 
-func printPlayer(header []string, stats []string) {
-	for i := 0; i < len(header); i++ {
-		if header[i] == "Player" {
-			stats[i] = strings.Split(stats[i], "\\")[0]
-		}
-		fmt.Println(header[i] + " - " + stats[i])
-	}
+var player bool
+
+func init() {
 }
 
-func main() {
+func playerStats() {
 	nbaStats, _ := os.Open("./nba_data.csv")
 	csvReader := csv.NewReader(nbaStats)
 	header, _ := csvReader.Read()
-	playerName := os.Args[1]
+	playerName := os.Args[2]
 	contin := true
 	found := false
 	for contin {
@@ -35,5 +32,22 @@ func main() {
 	}
 	if !found {
 		fmt.Println("Couldn't find that player")
+	}
+}
+
+func printPlayer(header []string, stats []string) {
+	for i := 0; i < len(header); i++ {
+		if header[i] == "Player" {
+			stats[i] = strings.Split(stats[i], "\\")[0]
+		}
+		fmt.Println(header[i] + " - " + stats[i])
+	}
+}
+
+func main() {
+	flag.BoolVar(&player, "player", false, "get player statistics for name passed")
+	flag.Parse()
+	if player {
+		playerStats()
 	}
 }
