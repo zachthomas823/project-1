@@ -1,11 +1,9 @@
 package main
 
 import (
-	"encoding/csv"
 	"flag"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 
 	"github.com/project-0/dataframe"
@@ -55,15 +53,9 @@ func printPlayer(header []string, stats []string) {
 	}
 }
 
-type statName struct {
-	name string
-	stat float64
-}
-
 func statLeader() {
-	nbaStats, _ := os.Open("./nba_data.csv")
-	csvReader := csv.NewReader(nbaStats)
-	header, _ := csvReader.Read()
+	df := dataframe.ReadCSV("./nba_data.csv")
+	header, _ := df.Data[0]
 	stat := os.Args[2]
 	var statIdx int
 	var found bool
@@ -77,48 +69,10 @@ func statLeader() {
 	if !found {
 		fmt.Println("Couldn't find that stat")
 	} else {
-		var allStat []statName
-		contin := true
-		for contin {
-			line, err := csvReader.Read()
-			if err != nil {
-				contin = false
-			} else {
-				name := strings.Split(line[1], "\\")[0]
-				stat, _ := strconv.ParseFloat(line[statIdx], 64)
-				allStat = append(allStat, statName{name, stat})
-			}
+		df.Sort(statIdx)
+		fmt.Println(df.Data[0])
+		for i := 1; i < len(df.Data); i++ {
+			fmt.Println(i, df.Data[i])
 		}
-		sortedStats := statSorter(allStat)
-		printStatLeader(sortedStats)
-	}
-}
-
-func statSorter(statNames []statName) []statName {
-	sortedNames := []statName{statNames[0]}
-	for i := 1; i < len(statNames); i++ {
-		stat := statNames[i].stat
-		placed := false
-		for j := 0; j < len(sortedNames); j++ {
-			if stat > sortedNames[j].stat {
-				sortedNames = append(sortedNames, sortedNames[len(sortedNames)-1])
-				for k := len(sortedNames) - 1; k > j; k-- {
-					sortedNames[k] = sortedNames[k-1]
-				}
-				sortedNames[j] = statNames[i]
-				placed = true
-				break
-			}
-		}
-		if !placed {
-			sortedNames = append(sortedNames, statNames[i])
-		}
-	}
-	return sortedNames
-}
-
-func printStatLeader(sn []statName) {
-	for i := 0; i < len(sn); i++ {
-		fmt.Println(i+1, ":", sn[i].name, "\t", sn[i].stat)
 	}
 }
