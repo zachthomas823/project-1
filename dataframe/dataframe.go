@@ -40,6 +40,8 @@ func ReadCSV(file string) *Dataframe {
 
 // Sort is a method for a Dataframe that takes a column number as a parameter
 // The column must be made of numeric characters in string form
+// Uses insertion sort algorithm
+// Changes are made in place
 func (df *Dataframe) Sort(column int) {
 	sortedM := make(map[int][]string)
 	sortedIdx := make([]int, len(df.Data))
@@ -77,6 +79,8 @@ func (df *Dataframe) Sort(column int) {
 	df.Data = sortedM
 }
 
+// DropCol removes the column specified by index from the dataframe
+// Changes are made in place
 func (df *Dataframe) DropCol(column int) {
 	m := make(map[int][]string)
 	for i := 0; i < len(df.Data); i++ {
@@ -86,4 +90,17 @@ func (df *Dataframe) DropCol(column int) {
 		m[i] = newRow
 	}
 	df.Data = m
+}
+
+// DropRow removes the row specified by index from the dataframe
+// Changes are made in place
+func (df *Dataframe) DropRow(row int) {
+	if row >= len(df.Data) {
+		fmt.Println("Index out of range")
+		return
+	}
+	for i := row; i < len(df.Data)-1; i++ {
+		df.Data[i] = df.Data[i+1]
+	}
+	delete(df.Data, len(df.Data)-1)
 }

@@ -9,6 +9,9 @@ import (
 	"github.com/project-0/dataframe"
 )
 
+// FILE is where to find the data to be parsed
+const FILE = "./nba_data.csv"
+
 var player bool
 var stat bool
 
@@ -27,7 +30,7 @@ func main() {
 }
 
 func playerStats() {
-	df := dataframe.ReadCSV("./nba_data.csv")
+	df := dataframe.ReadCSV(FILE)
 	df.DropCol(0)
 	header := df.Data[0]
 	playerName := os.Args[2]
@@ -55,7 +58,7 @@ func printPlayer(header []string, stats []string) {
 }
 
 func statLeader() {
-	df := dataframe.ReadCSV("./nba_data.csv")
+	df := dataframe.ReadCSV(FILE)
 	df.DropCol(0)
 	for i := 1; i < len(df.Data); i++ {
 		df.Data[i][0] = strings.Split(df.Data[i][0], "\\")[0]
