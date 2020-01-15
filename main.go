@@ -78,9 +78,10 @@ func statLeader() {
 		fmt.Println("Couldn't find that stat")
 	} else {
 		df.Sort(statIdx)
-		fmt.Println(df.Data[0])
-		for i := 1; i < len(df.Data); i++ {
-			fmt.Println(i, df.Data[i])
-		}
+		df.PrettyPrint()
+		// fmt.Println(df.Data[0])
+		// for i := 1; i < len(df.Data); i++ {
+		// 	fmt.Println(i, df.Data[i])
+		// }
 	}
 }

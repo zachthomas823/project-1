@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 )
 
 // Dataframe is the basic struct for this package.
@@ -103,4 +104,31 @@ func (df *Dataframe) DropRow(row int) {
 		df.Data[i] = df.Data[i+1]
 	}
 	delete(df.Data, len(df.Data)-1)
+}
+
+func (df *Dataframe) PrettyPrint() {
+	sizes := make([]int, len(df.Data[0]))
+	for i := 0; i < len(df.Data); i++ {
+		for k := 0; k < len(df.Data[i]); k++ {
+			if len(df.Data[i][k]) > sizes[k] {
+				sizes[k] = len(df.Data[i][k])
+			}
+		}
+	}
+	fullLine := len(df.Data[0]) + 1
+	for i := 0; i < len(sizes); i++ {
+		fullLine += sizes[i]
+	}
+	for i := 0; i < len(df.Data); i++ {
+		fmt.Print("|")
+		for k := 0; k < len(df.Data[i]); k++ {
+			spaces := sizes[k] - len(df.Data[i][k])
+			fmt.Print(strings.Repeat(" ", spaces/2))
+			fmt.Print(df.Data[i][k])
+			fmt.Print(strings.Repeat(" ", spaces-spaces/2))
+			fmt.Print("|")
+		}
+		fmt.Println()
+		fmt.Println(strings.Repeat("-", fullLine))
+	}
 }
