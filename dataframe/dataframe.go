@@ -115,10 +115,10 @@ func (df *Dataframe) PrettyPrint() {
 			}
 		}
 	}
-	fullLine := len(df.Data[0]) + 1
-	for i := 0; i < len(sizes); i++ {
-		fullLine += sizes[i]
-	}
+	// fullLine := len(df.Data[0]) + 1
+	// for i := 0; i < len(sizes); i++ {
+	// 	fullLine += sizes[i]
+	// }
 	for i := 0; i < len(df.Data); i++ {
 		fmt.Print("|")
 		for k := 0; k < len(df.Data[i]); k++ {
@@ -129,6 +129,11 @@ func (df *Dataframe) PrettyPrint() {
 			fmt.Print("|")
 		}
 		fmt.Println()
-		fmt.Println(strings.Repeat("-", fullLine))
+		for k := range sizes {
+			fmt.Print("+")
+			fmt.Print(strings.Repeat("-", sizes[k]))
+		}
+		fmt.Println("+")
+		// fmt.Println(strings.Repeat("-", fullLine))
 	}
 }
