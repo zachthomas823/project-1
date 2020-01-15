@@ -106,6 +106,7 @@ func (df *Dataframe) DropRow(row int) {
 	delete(df.Data, len(df.Data)-1)
 }
 
+// PrettyPrint prints out the dataframe in an easier to read than normal format
 func (df *Dataframe) PrettyPrint() {
 	sizes := make([]int, len(df.Data[0]))
 	for i := 0; i < len(df.Data); i++ {
@@ -115,10 +116,7 @@ func (df *Dataframe) PrettyPrint() {
 			}
 		}
 	}
-	// fullLine := len(df.Data[0]) + 1
-	// for i := 0; i < len(sizes); i++ {
-	// 	fullLine += sizes[i]
-	// }
+
 	for i := 0; i < len(df.Data); i++ {
 		fmt.Print("|")
 		for k := 0; k < len(df.Data[i]); k++ {
@@ -134,6 +132,5 @@ func (df *Dataframe) PrettyPrint() {
 			fmt.Print(strings.Repeat("-", sizes[k]))
 		}
 		fmt.Println("+")
-		// fmt.Println(strings.Repeat("-", fullLine))
 	}
 }
