@@ -7,6 +7,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/project-0/dataframe"
 )
 
 var player bool
@@ -27,21 +29,16 @@ func main() {
 }
 
 func playerStats() {
-	nbaStats, _ := os.Open("./nba_data.csv")
-	csvReader := csv.NewReader(nbaStats)
-	header, _ := csvReader.Read()
-	fmt.Println(header)
+	df := dataframe.ReadCSV("./nba_data.csv")
+	header := df.Data[0]
 	playerName := os.Args[2]
-	contin := true
 	found := false
-	for contin {
-		line, error := csvReader.Read()
-		if error != nil {
-			contin = false
-		} else if strings.Split(line[1], "\\")[0] == playerName {
+	for i := 1; i < len(df.Data); i++ {
+		line := df.Data[i]
+		if strings.Split(line[1], "\\")[0] == playerName {
 			printPlayer(header, line)
 			found = true
-			contin = false
+			break
 		}
 	}
 	if !found {
