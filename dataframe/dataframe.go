@@ -1,6 +1,5 @@
 // Package dataframe implements a dataframe.
-// This dataframe does not enforce first normal form.
-// It is built to handle JSON format files
+// A dataframe is a two dimensional table
 package dataframe
 
 import (
@@ -16,7 +15,8 @@ type Dataframe struct {
 }
 
 // ReadCSV takes the name of a csv file as an argument
-// and returns a pointer to a dataframe
+// and returns a pointer to a dataframe.
+// The first line will be interpreted as the header
 func ReadCSV(file string) *Dataframe {
 	f, err := os.Open(file)
 	if err != nil {
@@ -38,6 +38,8 @@ func ReadCSV(file string) *Dataframe {
 	return &df
 }
 
+// Sort is a method for a Dataframe that takes a column number as a parameter
+// The column must be made of numeric characters in string form
 func (df *Dataframe) Sort(column int) {
 	sortedM := make(map[int][]string)
 	sortedIdx := make([]int, len(df.Data))
@@ -73,4 +75,15 @@ func (df *Dataframe) Sort(column int) {
 		sortedM[i] = df.Data[sortedIdx[i]]
 	}
 	df.Data = sortedM
+}
+
+func (df *Dataframe) DropCol(column int) {
+	m := make(map[int][]string)
+	for i := 0; i < len(df.Data); i++ {
+		row1 := df.Data[i][0:column]
+		row2 := df.Data[i][column+1 : len(df.Data[i])]
+		newRow := append(row1, row2...)
+		m[i] = newRow
+	}
+	df.Data = m
 }

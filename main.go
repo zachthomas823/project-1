@@ -28,12 +28,13 @@ func main() {
 
 func playerStats() {
 	df := dataframe.ReadCSV("./nba_data.csv")
+	df.DropCol(0)
 	header := df.Data[0]
 	playerName := os.Args[2]
 	found := false
 	for i := 1; i < len(df.Data); i++ {
 		line := df.Data[i]
-		if strings.Split(line[1], "\\")[0] == playerName {
+		if strings.Split(line[0], "\\")[0] == playerName {
 			printPlayer(header, line)
 			found = true
 			break
@@ -55,6 +56,10 @@ func printPlayer(header []string, stats []string) {
 
 func statLeader() {
 	df := dataframe.ReadCSV("./nba_data.csv")
+	df.DropCol(0)
+	for i := 1; i < len(df.Data); i++ {
+		df.Data[i][0] = strings.Split(df.Data[i][0], "\\")[0]
+	}
 	header, _ := df.Data[0]
 	stat := os.Args[2]
 	var statIdx int
