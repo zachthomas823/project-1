@@ -108,19 +108,26 @@ func (df *Dataframe) DropRow(row int) {
 
 // PrettyPrint prints out the dataframe in an easier to read than normal format
 func (df *Dataframe) PrettyPrint() {
-	sizes := make([]int, len(df.Data[0]))
+	sizes := make([]int, len(df.Data[0])+1)
+	sizes[0] = 2
 	for i := 0; i < len(df.Data); i++ {
 		for k := 0; k < len(df.Data[i]); k++ {
-			if len(df.Data[i][k]) > sizes[k] {
-				sizes[k] = len(df.Data[i][k])
+			if len(df.Data[i][k]) > sizes[k+1] {
+				sizes[k+1] = len(df.Data[i][k])
 			}
 		}
 	}
-
 	for i := 0; i < len(df.Data); i++ {
+		fmt.Print(i)
+		if i < 10 {
+			fmt.Print("  ")
+		}
+		if i >= 10 && i < 100 {
+			fmt.Print(" ")
+		}
 		fmt.Print("|")
 		for k := 0; k < len(df.Data[i]); k++ {
-			spaces := sizes[k] - len(df.Data[i][k])
+			spaces := sizes[k+1] - len(df.Data[i][k])
 			fmt.Print(strings.Repeat(" ", spaces/2))
 			fmt.Print(df.Data[i][k])
 			fmt.Print(strings.Repeat(" ", spaces-spaces/2))
