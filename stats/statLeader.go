@@ -1,7 +1,6 @@
 package stats
 
 import (
-	"fmt"
 	"os"
 	"strings"
 
@@ -9,7 +8,7 @@ import (
 	"github.com/project-0/dataframe"
 )
 
-func StatLeader() {
+func StatLeader() string {
 	df := dataframe.ReadCSV(config.FILE)
 	df.DropCol(0)
 	for i := 1; i < len(df.Data); i++ {
@@ -27,9 +26,8 @@ func StatLeader() {
 		}
 	}
 	if !found {
-		fmt.Println("Couldn't find that stat")
-	} else {
-		df.Sort(statIdx)
-		df.PrettyPrint()
+		return ("Couldn't find that stat")
 	}
+	df.Sort(statIdx)
+	return df.PrettyString()
 }

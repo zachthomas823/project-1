@@ -9,9 +9,9 @@ import (
 
 func main() {
 	if config.Player {
-		stats.PlayerStats()
+		fmt.Println(stats.PlayerStats())
 	} else if config.Stat {
-		stats.StatLeader()
+		fmt.Println(stats.StatLeader())
 	} else {
 		fmt.Println("Please use tag -player \"Player Name\" \nor tag -stat \"Stat abrev\"")
 	}

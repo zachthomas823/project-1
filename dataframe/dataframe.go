@@ -141,3 +141,41 @@ func (df *Dataframe) PrettyPrint() {
 		fmt.Println("+")
 	}
 }
+
+// PrettyString returns a string of the dataframe in an easier to read than normal format
+func (df *Dataframe) PrettyString() string {
+	sizes := make([]int, len(df.Data[0])+1)
+	sizes[0] = 2
+	for i := 0; i < len(df.Data); i++ {
+		for k := 0; k < len(df.Data[i]); k++ {
+			if len(df.Data[i][k]) > sizes[k+1] {
+				sizes[k+1] = len(df.Data[i][k])
+			}
+		}
+	}
+	var result string
+	for i := 0; i < len(df.Data); i++ {
+		result = result + strconv.Itoa(i)
+		if i < 10 {
+			result = result + "  "
+		}
+		if i >= 10 && i < 100 {
+			result = result + " "
+		}
+		result = result + "|"
+		for k := 0; k < len(df.Data[i]); k++ {
+			spaces := sizes[k+1] - len(df.Data[i][k])
+			result = result + strings.Repeat(" ", spaces/2)
+			result = result + df.Data[i][k]
+			result = result + strings.Repeat(" ", spaces-spaces/2)
+			result = result + "|"
+		}
+		result = result + "\n"
+		for k := range sizes {
+			result = result + "+"
+			result = result + strings.Repeat("-", sizes[k])
+		}
+		result = result + "+"
+	}
+	return result
+}
