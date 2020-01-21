@@ -1,18 +1,17 @@
 package stats
 
 import (
-	"os"
 	"strings"
 
 	"github.com/project-0/config"
 	"github.com/project-0/dataframe"
 )
 
-func PlayerStats() string {
+func PlayerStats(flag string) string {
 	df := dataframe.ReadCSV(config.FILE)
 	df.DropCol(0)
 	header := df.Data[0]
-	playerName := os.Args[2]
+	playerName := flag
 	for i := 1; i < len(df.Data); i++ {
 		line := df.Data[i]
 		if strings.Split(line[0], "\\")[0] == playerName {

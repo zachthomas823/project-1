@@ -1,5 +1,5 @@
 // Package dataframe implements a dataframe.
-// A dataframe is a two dimensional table
+// A dataframe is a two dimensional table.
 package dataframe
 
 import (
@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-// Dataframe is the basic struct for this package.
+// Dataframe is the two dimensional table structure for this package
 type Dataframe struct {
 	Data map[int][]string
 }
@@ -175,7 +175,38 @@ func (df *Dataframe) PrettyString() string {
 			result = result + "+"
 			result = result + strings.Repeat("-", sizes[k])
 		}
-		result = result + "+"
+		result = result + "+\n"
 	}
+	return result
+}
+
+// ToJSON will return a string of the dataframe in JSON format.
+// The first column of the dataframe will be treated as a key to a map
+// which maps to a map. In the secondary map each column name will be
+// a key to the value that is held for that row.
+func (df *Dataframe) ToJSON() string {
+	var result string
+	result = "{"
+	for i := 1; i < len(df.Data); i++ {
+		var entry string
+		key := df.Data[i][0]
+		entry = entry + "\"" + key + "\":{\n\t"
+		for j := 1; j < len(df.Data[0]); j++ {
+			entry = entry + "\"" + df.Data[0][j] + "\": "
+			entry = entry + "\"" + df.Data[i][j]
+			if j == len(df.Data[0])-1 {
+				entry = entry + "\"\n"
+			} else {
+				entry = entry + "\",\n\t"
+			}
+		}
+		if i == len(df.Data)-1 {
+			entry = entry + "}\n"
+		} else {
+			entry = entry + "},\n"
+		}
+		result += entry
+	}
+	result = result + "}"
 	return result
 }
