@@ -3,13 +3,10 @@ package stats
 import (
 	"strings"
 
-	"github.com/project-0/config"
 	"github.com/project-0/dataframe"
 )
 
-func PlayerStats(flag string) string {
-	df := dataframe.ReadCSV(config.FILE)
-	df.DropCol(0)
+func PlayerStats(df *dataframe.Dataframe, flag string) string {
 	header := df.Data[0]
 	playerName := flag
 	for i := 1; i < len(df.Data); i++ {

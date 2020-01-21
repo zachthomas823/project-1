@@ -4,26 +4,25 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/project-0/config"
+	"github.com/project-0/dataframe"
+
 	"github.com/project-0/stats"
 )
 
 func main() {
-	http.Handle("/", http.FileServer(http.Dir("web")))
+	df := dataframe.ReadCSV(config.FILE) // Create a dataframe to be used
+	df.DropCol(0)
+	http.Handle("/", http.FileServer(http.Dir("web"))) // Use the index.html for the landing page
 	http.HandleFunc("/player", func(w http.ResponseWriter, r *http.Request) {
-		var player = r.FormValue("player_name")
-		fmt.Fprint(w, stats.PlayerStats(player))
-	})
-	http.HandleFunc("/pts", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, stats.StatLeader("PTS"))
-	})
-	http.HandleFunc("/ast", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		fmt.Fprint(w, stats.StatLeaderJSON("AST"))
+		var player = r.FormValue("player_name")      // Take the response from the player name entry
+		fmt.Fprint(w, stats.PlayerStats(df, player)) // Call the PlayerStats function with the df and player name
 	})
 	http.HandleFunc("/sorted_stats", func(w http.ResponseWriter, r *http.Request) {
-		var stat = r.FormValue("stat")
-		fmt.Fprintln(w, stat)
-		fmt.Fprint(w, stats.StatLeader(stat))
+		var stat = r.FormValue("stat")            // Take the response from the stat selection
+		fmt.Fprintln(w, stat, "\n")               // Print out the stat at the top of the page
+		fmt.Fprint(w, stats.StatLeader(df, stat)) // Print out the sorted and formatted results
 	})
+	fmt.Println("Listening on port 8080")
 	http.ListenAndServe(":8080", nil)
 }

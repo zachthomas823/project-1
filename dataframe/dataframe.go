@@ -22,12 +22,14 @@ func ReadCSV(file string) *Dataframe {
 	f, err := os.Open(file)
 	if err != nil {
 		fmt.Println("Error opening file!")
+		fmt.Println(err)
 		return nil
 	}
 	csvReader := csv.NewReader(f)
 	data, err := csvReader.ReadAll()
 	if err != nil {
-		fmt.Println("Error reading file")
+		fmt.Println("Error reading file!")
+		fmt.Println(err)
 		return nil
 	}
 	var df Dataframe
@@ -51,6 +53,9 @@ func (df *Dataframe) Sort(column int) {
 	sortedValue[1], _ = strconv.ParseFloat(df.Data[1][column], 64)
 	for i := 2; i < len(df.Data); i++ {
 		placed := false
+		if df.Data[i][column] == "" {
+			df.Data[i][column] = "0.0"
+		}
 		stat, err := strconv.ParseFloat(df.Data[i][column], 64)
 		if err != nil {
 			fmt.Println("non numeric value in column", column)
@@ -84,17 +89,22 @@ func (df *Dataframe) Sort(column int) {
 // Changes are made in place
 func (df *Dataframe) DropCol(column int) {
 	m := make(map[int][]string)
-	for i := 0; i < len(df.Data); i++ {
-		row1 := df.Data[i][0:column]
-		row2 := df.Data[i][column+1 : len(df.Data[i])]
-		newRow := append(row1, row2...)
-		m[i] = newRow
+	if len(df.Data[0]) > 1 {
+		for i := 0; i < len(df.Data); i++ {
+			row1 := df.Data[i][0:column]
+			row2 := df.Data[i][column+1 : len(df.Data[i])]
+			newRow := append(row1, row2...)
+			m[i] = newRow
+		}
+	} else {
+		fmt.Println("The dataframe has no columns")
 	}
 	df.Data = m
 }
 
 // DropRow removes the row specified by index from the dataframe
 // Changes are made in place
+// *Note* if row 0 is removed the next row will be interpreted as the new header
 func (df *Dataframe) DropRow(row int) {
 	if row >= len(df.Data) {
 		fmt.Println("Index out of range")

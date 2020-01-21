@@ -7,9 +7,7 @@ import (
 	"github.com/project-0/dataframe"
 )
 
-func StatLeader(flag string) string {
-	df := dataframe.ReadCSV(config.FILE)
-	df.DropCol(0)
+func StatLeader(df *dataframe.Dataframe, flag string) string {
 	for i := 1; i < len(df.Data); i++ {
 		df.Data[i][0] = strings.Split(df.Data[i][0], "\\")[0]
 	}
