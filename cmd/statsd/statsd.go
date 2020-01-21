@@ -20,8 +20,9 @@ func main() {
 		w.Header().Set("Content-Type", "application/json")
 		fmt.Fprint(w, stats.StatLeaderJSON("AST"))
 	})
-	http.HandleFunc("/stats", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/sorted_stats", func(w http.ResponseWriter, r *http.Request) {
 		var stat = r.FormValue("stat")
+		fmt.Fprintln(w, stat)
 		fmt.Fprint(w, stats.StatLeader(stat))
 	})
 	http.ListenAndServe(":8080", nil)
