@@ -1,5 +1,4 @@
-// Package dataframe implements a dataframe.
-// A dataframe is a two dimensional table.
+// Package dataframe implements a two dimensional table in first normal form.
 package dataframe
 
 import (
@@ -10,7 +9,7 @@ import (
 	"strings"
 )
 
-// Dataframe is the two dimensional table structure for this package
+// Dataframe is the two dimensional table structure for this package. The keys in the map are the row number in the table.
 type Dataframe struct {
 	Data map[int][]string
 }
@@ -43,8 +42,7 @@ func ReadCSV(file string) *Dataframe {
 
 // Sort is a method for a Dataframe that takes a column number as a parameter
 // The column must be made of numeric characters in string form
-// Uses insertion sort algorithm
-// Changes are made in place
+// Uses insertion sort algorithm. Changes are made in place.
 func (df *Dataframe) Sort(column int) {
 	sortedM := make(map[int][]string)
 	sortedIdx := make([]int, len(df.Data))
@@ -85,7 +83,7 @@ func (df *Dataframe) Sort(column int) {
 	df.Data = sortedM
 }
 
-// DropCol removes the column specified by index from the dataframe
+// DropCol removes the column specified by index from the dataframe.
 // Changes are made in place
 func (df *Dataframe) DropCol(column int) {
 	m := make(map[int][]string)
@@ -103,7 +101,7 @@ func (df *Dataframe) DropCol(column int) {
 }
 
 // DropRow removes the row specified by index from the dataframe
-// Changes are made in place
+// Changes are made in place.
 // *Note* if row 0 is removed the next row will be interpreted as the new header
 func (df *Dataframe) DropRow(row int) {
 	if row >= len(df.Data) {
@@ -116,7 +114,7 @@ func (df *Dataframe) DropRow(row int) {
 	delete(df.Data, len(df.Data)-1)
 }
 
-// PrettyPrint prints out the dataframe in an easier to read than normal format
+// PrettyPrint prints out the dataframe in an easier to read than normal format.
 func (df *Dataframe) PrettyPrint() {
 	sizes := make([]int, len(df.Data[0])+1)
 	sizes[0] = 2
@@ -152,7 +150,7 @@ func (df *Dataframe) PrettyPrint() {
 	}
 }
 
-// PrettyString returns a string of the dataframe in an easier to read than normal format
+// PrettyString returns a string of the dataframe in an easier to read than normal format.
 func (df *Dataframe) PrettyString() string {
 	sizes := make([]int, len(df.Data[0])+1)
 	sizes[0] = 2

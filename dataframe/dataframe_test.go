@@ -1,6 +1,7 @@
 package dataframe
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 )
@@ -34,6 +35,12 @@ func TestReadCSV(t *testing.T) {
 	if df.Data[2][2] != "1.0" {
 		t.Error("Error in row 1, column 2. Should be 1.0, was", df.Data[2][2])
 	}
+}
+
+func ExampleReadCSV() {
+	df := ReadCSV("./test.csv")
+	fmt.Print(df.Data)
+	// Output: map[0:[Column 0 1 2.0] 1:[Column B B b] 2:[Column 2 3 1.0]]
 }
 
 func TestSort(t *testing.T) {
@@ -101,6 +108,13 @@ func TestSort(t *testing.T) {
 		t.Error("Error in row 1, column 2. Should be 3, was", df.Data[2][2])
 	}
 }
+
+// func ExampleSort() {
+// 	df := ReadCSV("./test.csv")
+// 	df.Sort(0)
+// 	fmt.Print(df.Data)
+// 	// Output: map[0:[Column 0 2.0 1] 1:[Column B b B] 2:[Column 2 1.0 3]]
+// }
 
 func TestDropCol(t *testing.T) {
 	df := ReadCSV("./test.csv")
