@@ -6,6 +6,8 @@ import (
 	"github.com/project-0/dataframe"
 )
 
+// PlayerStats takes the given flag which is a player name and finds that player in
+// the dataframe then returns a string of the entry found or returns "Couldn't find that player"
 func PlayerStats(df *dataframe.Dataframe, flag string) string {
 	header := df.Data[0]
 	playerName := strings.ToLower(flag)
