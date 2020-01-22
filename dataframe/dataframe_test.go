@@ -127,4 +127,11 @@ func TestDropRow(t *testing.T) {
 		!reflect.DeepEqual(df.Data[1], []string{"2.0", "b", "1.0"}) {
 		t.Error("DropRow(0) did not properly drop the first row")
 	}
+	df.DropRow(1)
+	if !reflect.DeepEqual(df.Data[0], []string{"1", "B", "3"}) ||
+		len(df.Data) != 1 {
+		t.Error("DropRow(1) did not properly drop the second row")
+	}
+	df.DropRow(0)
+	df.DropRow(0)
 }
