@@ -8,10 +8,10 @@ import (
 
 func PlayerStats(df *dataframe.Dataframe, flag string) string {
 	header := df.Data[0]
-	playerName := flag
+	playerName := strings.ToLower(flag)
 	for i := 1; i < len(df.Data); i++ {
 		line := df.Data[i]
-		if strings.Split(line[0], "\\")[0] == playerName {
+		if strings.ToLower(strings.Split(line[0], "\\")[0]) == playerName {
 			return printPlayer(header, line)
 		}
 	}
