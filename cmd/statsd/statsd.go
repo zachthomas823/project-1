@@ -1,8 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
+	"strings"
 
 	"github.com/project-0/config"
 	"github.com/project-0/dataframe"
@@ -13,6 +17,14 @@ import (
 func main() {
 	df := dataframe.ReadCSV(config.FILE) // Create a dataframe to be used
 	df.DropCol(0)
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Println("What port would you like to use?:")
+	port, err := reader.ReadString('\n')
+	if err != nil {
+		log.Fatalln(err)
+	}
+	port = ":" + port
+	port = strings.Replace(port, "\n", "", 1)
 	http.Handle("/", http.FileServer(http.Dir("web"))) // Use the index.html for the landing page
 	http.HandleFunc("/player", func(w http.ResponseWriter, r *http.Request) {
 		var player = r.FormValue("player_name")      // Take the response from the player name entry
@@ -23,6 +35,6 @@ func main() {
 		fmt.Fprintln(w, stat, "\n")               // Print out the stat at the top of the page
 		fmt.Fprint(w, stats.StatLeader(df, stat)) // Print out the sorted and formatted results
 	})
-	fmt.Println("Listening on port 8080")
-	http.ListenAndServe(":8080", nil)
+	fmt.Println("Listening on port " + port)
+	http.ListenAndServe(port, nil)
 }
