@@ -1,29 +1,20 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"log"
 	"net/http"
-	"os"
+	"strconv"
 	"strings"
 
-	"github.com/project-0/config"
-	"github.com/project-0/dataframe"
-
-	"github.com/project-0/stats"
+	"github.com/project-1/config"
+	"github.com/project-1/dataframe"
+	"github.com/project-1/stats"
 )
 
 func main() {
 	df := dataframe.ReadCSV(config.FILE) // Create a dataframe to be used
 	df.DropCol(0)
-	reader := bufio.NewReader(os.Stdin)
-	fmt.Println("What port would you like to use?:")
-	port, err := reader.ReadString('\n')
-	if err != nil {
-		log.Fatalln(err)
-	}
-	port = ":" + port
+	port := ":" + strconv.FormatInt(config.PORT, 10)
 	port = strings.Replace(port, "\n", "", 1)
 	http.Handle("/", http.FileServer(http.Dir("web"))) // Use the index.html for the landing page
 	http.HandleFunc("/player", func(w http.ResponseWriter, r *http.Request) {

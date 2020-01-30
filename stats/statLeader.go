@@ -3,8 +3,8 @@ package stats
 import (
 	"strings"
 
-	"github.com/project-0/config"
-	"github.com/project-0/dataframe"
+	"github.com/project-1/config"
+	"github.com/project-1/dataframe"
 )
 
 // StatLeader takes the given flag which is a statistic that the user is interested in

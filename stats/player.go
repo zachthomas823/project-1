@@ -3,7 +3,7 @@ package stats
 import (
 	"strings"
 
-	"github.com/project-0/dataframe"
+	"github.com/project-1/dataframe"
 )
 
 // PlayerStats takes the given flag which is a player name and finds that player in
