@@ -31,5 +31,8 @@ func main() {
 		log.Fatal(err)
 	}
 	port = strings.Replace(port, "\n", "", 1)
+	if port[0] != ':' {
+		port = ":" + port
+	}
 	http.ListenAndServe(port, nil)
 }
