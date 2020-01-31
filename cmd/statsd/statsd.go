@@ -22,9 +22,12 @@ func main() {
 		fmt.Fprint(w, stats.PlayerStats(df, player)) // Call the PlayerStats function with the df and player name
 	})
 	http.HandleFunc("/sorted_stats", func(w http.ResponseWriter, r *http.Request) {
-		var stat = r.FormValue("stat") // Take the response from the stat selection
-		fmt.Fprintln(w, stat, "\n")    // Print out the stat at the top of the page
-		//fmt.Fprint(w, stats.StatLeader(df, stat)) // Print out the sorted and formatted results
+		var stat = r.FormValue("stat")            // Take the response from the stat selection
+		fmt.Fprintln(w, stat, "\n")               // Print out the stat at the top of the page
+		fmt.Fprint(w, stats.StatLeader(df, stat)) // Print out the sorted and formatted results
+	})
+	http.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, "nothing")
 	})
 	fmt.Println("Listening on port " + port)
 	http.ListenAndServe(port, nil)
