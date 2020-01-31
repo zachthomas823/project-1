@@ -6,7 +6,7 @@ import "flag"
 const FILE = "./nba_data.csv"
 
 // PORT is the port on which the server will run
-const PORT int64 = 2020
+const PORT int64 = 6969
 
 // Player flag for if the user wants an individual player
 var Player bool
