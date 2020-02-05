@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/project-1/config"
 	"github.com/project-1/dataframe"
@@ -17,7 +18,9 @@ func main() {
 	df := dataframe.ReadCSV(config.FILE) // Create a dataframe to be used
 	df.DropCol(0)                        // Dropping the first column which is arbitrary rankings
 
-	logFile, err := os.OpenFile("activity.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+	year, month, day := time.Now().Date()
+	logFileName := "activity-" + strconv.Itoa(year) + "-" + strconv.Itoa(int(month)) + "-" + strconv.Itoa(day) + ".log"
+	logFile, err := os.OpenFile(logFileName, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
